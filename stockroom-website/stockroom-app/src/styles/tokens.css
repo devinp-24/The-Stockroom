@@ -1,0 +1,80 @@
+/* GENERATED FILE — do not edit.
+ * Source: shared/tokens.js
+ * Rebuild: node scripts/build-tokens.mjs
+ * Active theme: light
+ */
+
+:root {
+  /* Primitives */
+  --ground: #EFEDE7;
+  --ink: #131311;
+  --rule: #D5D1C7;
+  --signal: #C0341A;
+
+  /* Warm neutral scale */
+  --neutral-50: #EFEDE7;
+  --neutral-100: #E4E1DA;
+  --neutral-200: #D5D1C7;
+  --neutral-300: #A8A49B;
+  --neutral-400: #8B8880;
+  --neutral-500: #6F6C64;
+  --neutral-600: #3A3A35;
+  --neutral-700: #2D2D29;
+  --neutral-800: #232320;
+  --neutral-850: #1A1A18;
+  --neutral-900: #131311;
+  --neutral-950: #0B0B0A;
+
+  /* Semantic roles (light) */
+  --bg: #EFEDE7;
+  --surface: #F5F3EF;
+  --surface-raised: #E4E1DA;
+  --surface-sunken: #D5D1C7;
+  --border: rgba(19, 19, 17, 0.12);
+  --border-strong: rgba(19, 19, 17, 0.24);
+  --hairline: #D5D1C7;
+  --text: #131311;
+  --text-dim: #6F6C64;
+  --text-faint: #8B8880;
+  --accent: #C0341A;
+  --accent-strong: #9E2915;
+  --accent-tint: rgba(192, 52, 26, 0.16);
+  --accent-glow: rgba(192, 52, 26, 0.24);
+  --scrim: rgba(19, 19, 17, 0.55);
+  --overlay: rgba(19, 19, 17, 0.32);
+  --status-owned: #131311;
+  --status-owned-tint: rgba(19, 19, 17, 0.08);
+  --status-want: #8B8880;
+  --status-want-tint: rgba(19, 19, 17, 0.04);
+  --price-up: #131311;
+  --price-up-tint: rgba(19, 19, 17, 0.06);
+  --price-down: #C0341A;
+  --price-down-tint: rgba(192, 52, 26, 0.16);
+  --price-neutral: #8B8880;
+  --price-neutral-tint: rgba(19, 19, 17, 0.04);
+  --danger: #C0341A;
+  --danger-tint: rgba(192, 52, 26, 0.16);
+  --on-accent: #EFEDE7;
+
+  /* Radii */
+  --radius-none: 0px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-xxl: 22px;
+  --radius-pill: 999px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 28px;
+  --space-xxxl: 40px;
+
+  /* Type */
+  --font-body: 'Archivo', system-ui, -apple-system, sans-serif;
+  --font-display: 'Archivo', system-ui, sans-serif;
+}

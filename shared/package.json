@@ -1,0 +1,8 @@
+{
+  "name": "@stockroom/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Platform-agnostic logic and design tokens shared by the web app, the mobile app, and the backend. No dependencies, no platform imports — everything here must run unchanged under Vite, Metro, and plain Node.",
+  "main": "index.js"
+}

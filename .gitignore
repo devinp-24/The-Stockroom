@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.expo/
+
+# Secrets: the KicksDB key and the owner token never leave the machine.
+.env
+.env*.local
+
+# Personal data and generated caches. Back the collection up from the app.
+stockroom-website/data/
+anta-kt-images/
+other-images/
+*.zip
+
+# Local tooling
+.claude/
+.DS_Store
+*.log
+.proxy.log

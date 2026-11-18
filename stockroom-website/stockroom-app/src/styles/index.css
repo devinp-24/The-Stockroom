@@ -1,0 +1,14 @@
+/* Stylesheet entry point. Import order is load-bearing:
+ *
+ *   tokens     generated from shared/tokens.js — must define the custom
+ *              properties before anything reads them
+ *   fonts      self-hosted @font-face declarations
+ *   base       document reset, root layout, focus, reduced motion
+ *   legacy-ui  the current interface's component styles; Phase 1 replaces
+ *              most of this file
+ */
+
+@import './tokens.css';
+@import './fonts.css';
+@import './base.css';
+@import './legacy-ui.css';

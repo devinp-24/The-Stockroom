@@ -1,0 +1,14 @@
+{
+  "name": "the-stockroom",
+  "private": true,
+  "type": "module",
+  "description": "A sneaker collection and wishlist: web app, iOS/Android companion, and the Express server they share.",
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "build": "npm ci --prefix stockroom-website && npm ci --include=dev --prefix stockroom-website/stockroom-app && npm run build --prefix stockroom-website/stockroom-app",
+    "start": "node stockroom-website/server.js",
+    "seed": "node scripts/seed-remote.mjs"
+  }
+}

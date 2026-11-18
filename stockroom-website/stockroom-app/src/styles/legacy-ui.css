@@ -1,0 +1,1953 @@
+/* Interim component styles.
+ *
+ * Lifted verbatim out of the 1,500-line <style> string that used to live
+ * inside App.jsx, with two changes: the colour literals now resolve through
+ * the generated design tokens, and the @import of Google Fonts is gone
+ * (see fonts.css).
+ *
+ * This file describes the CURRENT interface, not the target one. Phase 1
+ * replaces most of it — the ambient blobs, grain overlay, hero gradient,
+ * KPI stat strip, marquee ticker, tilt/spotlight and confetti are all
+ * scheduled for removal. Treat it as a holding pen, not a design system:
+ * the durable layer is tokens.css + base.css.
+ */
+
+.sd-root {
+
+  position: relative;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  padding: 40px 28px 64px;
+  width: 100%;
+  max-width: 1120px;
+  isolation: isolate;
+}
+
+.sd-root * { box-sizing: border-box; }
+
+.sd-root :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sd-tab-pill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.sd-tab-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sd-tab-count {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  background: var(--surface-raised);
+  color: var(--text-faint);
+  padding: 1px 7px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 14px;
+  text-align: center;
+}
+
+/* Right-anchored. The toolbar wraps on narrow viewports, and without this the
+   action group drops to the left edge of the second row, which reads as the
+   layout having come apart rather than having reflowed. */
+.sd-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sd-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 13px;
+  color: var(--text-dim);
+  transition: border-color 0.15s ease, width 0.25s ease;
+}
+
+.sd-search:focus-within {
+  border-color: var(--accent);
+}
+
+.sd-search input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+  width: 150px;
+  transition: width 0.25s ease;
+}
+
+.sd-search:focus-within input { width: 200px; }
+
+.sd-search input::placeholder { color: var(--text-faint); }
+
+.sd-add {
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sd-add:hover { background: var(--accent-strong); }
+
+.sd-refresh {
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.sd-refresh:hover { border-color: var(--border-strong); color: var(--text); }
+.sd-refresh:disabled { cursor: default; opacity: 0.6; }
+
+.sd-loading, .sd-empty {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 72px 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+.sd-root * { transition: none !important; animation: none !important; }
+}
+
+.sd-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+.sd-form {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(480px, 100vw);
+  background: var(--surface);
+  color: var(--text);
+  border-left: 1px solid var(--border);
+  padding: 26px 26px 24px;
+  overflow-y: auto;
+  box-shadow: -24px 0 60px rgba(19,19,17,0.14);
+}
+
+.sd-form-preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sd-form-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.sd-form-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.sd-form-head h2 {
+  font-family: var(--font-display);
+  font-stretch: 70%;
+  font-weight: 800;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.sd-form-head button {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+}
+
+.sd-form-head button:hover {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+
+.sd-lookup {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.sd-lookup-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 7px;
+}
+
+.sd-lookup-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--surface-raised);
+  transition: border-color 0.15s ease;
+}
+
+.sd-lookup-box:focus-within {
+  border-color: var(--accent);
+}
+
+.sd-lookup-box svg {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.sd-lookup-box input {
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  background: transparent;
+}
+
+.sd-lookup-clear {
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  display: flex;
+  padding: 3px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.sd-lookup-clear:hover {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+
+.sd-lookup-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin: 9px 0 0;
+}
+
+.sd-lookup-error {
+  font-size: 11px;
+  color: var(--danger);
+  margin: 9px 0 0;
+}
+
+.sd-lookup-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 30px 20px;
+  margin-top: 10px;
+  color: var(--text-faint);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.sd-lookup-results {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-height: 360px;
+  overflow-y: auto;
+  background: var(--surface-raised);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.sd-lookup-result {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  padding: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.sd-lookup-result:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.sd-lookup-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface-sunken);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sd-lookup-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+.sd-lookup-price {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: var(--scrim);
+  color: var(--on-accent);
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 20px;
+}
+
+.sd-lookup-text {
+  min-width: 0;
+}
+
+.sd-lookup-brand {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 2px;
+}
+
+.sd-lookup-model {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sd-lookup-colorway {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  margin: 3px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sd-form-status {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: var(--surface-raised);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.sd-form-status button {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sd-form-status button.active.owned {
+  background: var(--status-owned-tint);
+  color: var(--status-owned);
+}
+
+.sd-form-status button.active.want {
+  background: var(--status-want-tint);
+  color: var(--status-want);
+}
+
+.sd-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.sd-span2 { grid-column: 1 / -1; }
+
+.sd-form-grid label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sd-form-grid input,
+.sd-form-grid textarea {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 11px;
+  background: var(--surface-raised);
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.sd-form-grid input:focus,
+.sd-form-grid textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.sd-taginput {
+  position: relative;
+}
+
+.sd-taginput-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 9px;
+  background: var(--surface-raised);
+  transition: border-color 0.15s ease;
+  cursor: text;
+}
+
+.sd-taginput-box:focus-within {
+  border-color: var(--accent);
+}
+
+.sd-taginput-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--accent-strong);
+  background: var(--accent-tint);
+  padding: 4px 4px 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.sd-taginput-chip button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--accent-strong);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.sd-taginput-chip button:hover {
+  background: var(--accent-tint);
+}
+
+.sd-taginput-box input {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text);
+  padding: 3px 2px;
+}
+
+.sd-taginput-suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(19,19,17,0.12);
+  z-index: 5;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.sd-taginput-suggestions button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sd-taginput-suggestions button:hover {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+
+.sd-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.sd-form-actions button {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.sd-cancel-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.sd-cancel-btn:hover { border-color: var(--border-strong); color: var(--text); }
+
+.sd-save-btn {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: var(--on-accent);
+}
+
+.sd-save-btn:hover { background: var(--accent-strong); }
+
+.sd-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 13px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 16px 34px rgba(19,19,17,0.12);
+  z-index: 100;
+}
+
+@media (max-width: 480px) {
+.sd-form { width: 100vw; }
+  .sd-form-grid { grid-template-columns: 1fr; }
+  .sd-search input { width: 110px; }
+  .sd-search:focus-within input { width: 140px; }
+  .sd-toast { left: 16px; right: 16px; bottom: 16px; }
+  .sd-lookup-results { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
+}
+
+/* ---------------------------------------------------------------------------
+   Phase 1.1 — cutout photography.
+   Replaces the tilt/spotlight tile. The shoe sits directly on the surface
+   with no container: mix-blend-mode:multiply dissolves the white backdrop
+   baked into every StockX asset, which only works over a light ground.
+   The blend stays on this wrapper and never moves onto the <img> — putting a
+   blend and an animating filter on one element makes Safari paint a single
+   unblended frame when the layer is torn down.
+--------------------------------------------------------------------------- */
+.sd-photo {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  mix-blend-mode: multiply;
+}
+
+.sd-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.sd-photo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  color: var(--text-faint);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  background: var(--surface-raised);
+}
+
+/* ---------------------------------------------------------------------------
+   Phase 1.2 — the register.
+   Plates, not cards: no container, no border, no tile. The photograph sits
+   directly on the paper and the caption hangs beneath a hairline.
+--------------------------------------------------------------------------- */
+.sd-register {
+  display: grid;
+  align-items: start;
+  gap: 46px 32px;
+
+  /* The plates blend with the paper via multiply, and without a boundary that
+     blending reaches anything drawn over the grid -- the sort menu rendered
+     translucent, with a shoe showing through it. Isolating the register
+     contains the blend group, and painting the ground colour here gives the
+     cutouts the same paper to dissolve into that they had before. */
+  isolation: isolate;
+  background: var(--bg);
+}
+
+/* Holdings run larger; the wishlist runs smaller and denser, so more of it
+   fits per row. Both are uniform within themselves — every photograph is
+   contained into an identical box, so no pair reads as larger than another
+   whatever its proportions. */
+.sd-register.owned {
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+}
+
+.sd-register.want {
+  grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+}
+
+.sd-plate {
+  display: flex;
+  flex-direction: column;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sd-plate:active { cursor: grabbing; }
+.sd-plate.is-dragging { opacity: 0.3; }
+.sd-plate.is-drag-over .sd-plate-caption { border-top-color: var(--accent); }
+
+.sd-plate-photo { cursor: pointer; }
+.sd-register.owned .sd-plate-photo { height: 168px; }
+.sd-register.want .sd-plate-photo { height: 108px; }
+
+/* Wanted pairs are held back rather than stripped. Colour is often the only
+   thing separating one Kobe 5 from the next, so desaturating to zero made the
+   wishlist unreadable. Hovering restores full strength — a preview of the
+   unlock.
+   The brightness step is load-bearing: contrast() drags the white backdrop
+   down to ~0.95, and without pushing it past 1.0 it clips as a visible grey
+   rectangle under multiply, reintroducing the very box this design removes.
+   Note the filter sits on the <img> while the blend sits on .sd-photo above
+   it — a blend and an animating filter on one element makes Safari paint a
+   single unblended frame when it tears the compositing layer down. */
+.sd-plate.want .sd-plate-photo img {
+  filter: saturate(0.4) contrast(0.9) brightness(1.14);
+}
+
+/* No transition on this filter, deliberately. Animating it put the image on a
+   composited layer where the transition never advanced -- the value froze at
+   its starting point, so hover appeared to do nothing even though the rule
+   was matching. `will-change: filter` made it worse by forcing the layer
+   permanently. The reveal is instant instead, which is what a near-zero-motion
+   design wanted regardless. */
+
+@media (hover: hover) {
+/* Keyed to the PLATE, not the register, so the reveal works in Both as well
+   as Acquisitions — the muting is plate-scoped and the hover must match it. */
+.sd-plate.want:hover .sd-plate-photo img {
+    filter: saturate(1) contrast(1) brightness(1);
+  }
+}
+
+/* Every plate reserves the same number of lines for each field, so a long
+   name can never make its plate taller than its neighbours. This is what
+   keeps rows aligned top and bottom. */
+.sd-plate-caption {
+  padding-top: 13px;
+  margin-top: 11px;
+  border-top: 1px solid var(--hairline);
+  transition: border-color 0.15s ease;
+}
+
+.sd-plate .sd-brand {
+  margin: 0 0 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sd-plate .sd-model {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 72%;
+  font-weight: 750;
+  text-transform: uppercase;
+  font-size: 19px;
+  line-height: 1.02;
+  letter-spacing: 0;
+  min-height: calc(2em * 1.02);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sd-register.want .sd-plate .sd-model { font-size: 15px; }
+
+.sd-plate .sd-colorway {
+  margin: 5px 0 0;
+  font-size: 12.5px;
+  line-height: 1.3;
+  font-weight: 450;
+  color: var(--text-dim);
+  min-height: calc(2em * 1.3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+}
+
+.sd-register.want .sd-plate .sd-colorway { font-size: 11.5px; }
+
+.sd-spec {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 11px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-spec-rule { flex: 1; height: 1px; background: var(--hairline); }
+
+.sd-spec-size {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.sd-move {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.38;
+  font-weight: 500;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  min-height: calc(2em * 1.38);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The one chromatic event: this pair has fallen to what you would pay. */
+.sd-move.flagged { color: var(--accent); font-weight: 600; }
+
+@media (max-width: 520px) {
+.sd-register { gap: 34px 20px; }
+  .sd-register.owned { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .sd-register.want { grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)); }
+  .sd-register.owned .sd-plate-photo { height: 120px; }
+}
+
+/* Detail view, on the plate vocabulary. */
+.sd-spec-price { font-size: 15px; font-weight: 700; }
+.sd-plate .sd-spec-price { font-size: 13px; }
+
+.sd-spec-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 0;
+}
+
+.sd-detail-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: 1px solid var(--hairline);
+  padding: 4px 10px;
+}
+
+/* ---------------------------------------------------------------------------
+   Phase 1.3 — masthead, registers, filtering.
+--------------------------------------------------------------------------- */
+.sd-masthead {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 16px;
+  margin-bottom: 0;
+}
+
+.sd-wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 70%;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(40px, 9vw, 104px);
+  line-height: 0.84;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* One line of type, not a row of KPI tiles. */
+.sd-standfirst {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 26px;
+  margin: 18px 0 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-standfirst b { color: var(--ink); font-weight: 700; }
+
+/* Sits above the isolated register so the sort menu can overlap the grid. */
+.sd-toolbar {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 16px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sd-registers { display: flex; gap: 22px; }
+
+.sd-register-tab {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 4px 0 6px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.sd-register-tab:hover { color: var(--ink); }
+
+.sd-register-tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.sd-register-count {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-register-tab.active .sd-register-count { color: var(--text-dim); }
+
+/* The running count of what the grid is showing. Same micro-type as the
+   standfirst so it reads as a caption on the grid rather than a fourth
+   control, and it sits in the 30px the toolbar already left above the first
+   row instead of adding a band of its own. */
+.sd-tally {
+  margin: -16px 0 18px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-tally b { color: var(--ink); font-weight: 700; }
+
+.sd-tally-qual { color: var(--text-faint); }
+
+.sd-search-clear {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 2px;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.sd-search-clear:hover { color: var(--ink); }
+
+.sd-empty {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 72px 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 16px;
+}
+
+.sd-empty-title {
+  font-family: var(--font-display);
+  font-stretch: 70%;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.sd-empty-body {
+  margin: 0 auto;
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+.sd-empty-clear-btn {
+  margin-top: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 9px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.sd-empty-clear-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.sd-error {
+  font-size: 13px;
+  color: var(--danger);
+  margin: 0 0 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+.sd-root * { transition: none !important; animation: none !important; }
+}
+
+.sd-brand {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 3px;
+}
+
+.sd-model {
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.3;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+  min-height: 2.3em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sd-colorway {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: 0 0 14px;
+  min-height: 1.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sd-confirm-btn {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  padding: 6px 11px;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.sd-confirm-btn.yes {
+  background: var(--danger-tint);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.sd-confirm-btn.no {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+
+/* ---------------------------------------------------------------------------
+   Sort control. Rebuilt from a button + listbox because a native <select>
+   paints both its control and its menu with the OS's own chrome, which CSS
+   cannot reach.
+--------------------------------------------------------------------------- */
+.sd-sort { display: inline-flex; align-items: center; gap: 9px; }
+
+.sd-sort-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.sd-sort-control { position: relative; }
+
+.sd-sort-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 152px;
+  padding: 8px 0 8px 2px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.sd-sort-trigger:hover,
+.sd-sort-trigger.is-open { border-bottom-color: var(--ink); }
+.sd-sort-trigger svg { color: var(--text-faint); flex-shrink: 0; }
+
+.sd-sort-menu {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: 0 14px 34px rgba(19, 19, 17, 0.14);
+}
+
+.sd-sort-option {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sd-sort-option.is-active { background: var(--surface-sunken); color: var(--ink); }
+.sd-sort-option.is-selected { color: var(--ink); font-weight: 650; }
+
+/* ---------------------------------------------------------------------------
+   Stacked registers, used by "Both". Each section keeps its own scale so the
+   held/wanted distinction survives being shown together — flattening the two
+   into one grid was what made them hard to tell apart.
+--------------------------------------------------------------------------- */
+.sd-section + .sd-section { margin-top: 64px; }
+
+.sd-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 9px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.sd-section-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 70%;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(19px, 2.4vw, 26px);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+.sd-section-head span {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* "Both" is a way to search across the two registers, not the main view. */
+.sd-register-tab.is-secondary {
+  margin-left: 6px;
+  padding-left: 22px;
+  border-left: 1px solid var(--hairline);
+  font-size: 11px;
+  color: var(--neutral-400);
+}
+
+.sd-register-tab.is-secondary.active { color: var(--ink); }
+
+/* "Both" is one mixed grid at a single scale — separating it back into two
+   sections just reproduced the other two registers and made the tab
+   redundant. Uniform size, with saturation carrying held vs. wanted. */
+.sd-register.all { grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); }
+.sd-register.all .sd-plate-photo { height: 136px; }
+.sd-register.all .sd-plate .sd-model { font-size: 16px; }
+.sd-register.all .sd-plate .sd-colorway { font-size: 12px; }
+
+/* ---------------------------------------------------------------------------
+   Phase 1.4 — the detail view as a specimen page.
+   One column: the pair full-bleed at the top, then everything known about it
+   as a plain ruled table. Replaces the fixed two-column panel.
+--------------------------------------------------------------------------- */
+.sd-detail-panel {
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: 0 30px 70px rgba(19, 19, 17, 0.18);
+}
+
+.sd-detail-content {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sd-detail-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  display: flex;
+  padding: 7px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.sd-detail-close:hover { border-color: var(--ink); }
+
+/* Move between pairs without leaving the specimen page.
+   The chevrons sit in the plate's own side margins -- a cutout never fills
+   the full width -- so they read as gallery navigation rather than as another
+   row of buttons competing with the actions bar, and they never cover the
+   ruled table below. The stage is the fixed frame the plate slides through. */
+.sd-detail-stage {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sd-detail-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  transform: translateY(-50%);
+  padding: 9px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.sd-detail-nav.prev { left: 12px; }
+.sd-detail-nav.next { right: 12px; }
+.sd-detail-nav:hover:not(:disabled) { border-color: var(--ink); }
+
+/* Kept in place rather than hidden at the ends: a chevron that vanishes moves
+   the other one, and the greyed pair says plainly where the register stops. */
+.sd-detail-nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.sd-detail-counter {
+  position: absolute;
+  left: 30px;
+  bottom: 11px;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Full-bleed, not boxed into a column. */
+.sd-detail-plate {
+  flex-shrink: 0;
+  padding: 30px 30px 22px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--bg);
+  isolation: isolate;
+}
+
+.sd-detail-photo { height: 210px; }
+
+.sd-detail-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 22px 30px 28px;
+}
+
+.sd-detail-model {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-stretch: 70%;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.sd-detail-colorway {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 450;
+  color: var(--text-dim);
+}
+
+.sd-detail-body .sd-move { margin-top: 12px; min-height: 0; }
+
+.sd-detail-heading {
+  margin: 28px 0 12px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--ink);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Specification table — hairline rows, tabular figures. */
+.sd-detail-spec { margin: 0; }
+
+.sd-detail-spec-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sd-detail-spec-row dt {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-detail-spec-row dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.sd-detail-notes {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+/* Price history. Reads honestly at one observation. */
+.sd-history { margin: 0; }
+
+.sd-history-chart { width: 100%; height: 64px; overflow: visible; }
+.sd-history-line { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.sd-history-basis { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 3; }
+.sd-history-end { fill: var(--accent); }
+
+.sd-history-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-history-single,
+.sd-history-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-history-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Actions pinned below the scrolling body. */
+.sd-detail-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+  padding: 16px 30px;
+  border-top: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.sd-detail-actions button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sd-acquire-btn { margin-left: auto; }
+
+/* The want -> owned step. Says what it will write before writing it. */
+.sd-acquire { width: 100%; }
+
+.sd-acquire-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sd-acquire-field span {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-acquire-field input {
+  flex: 1;
+  padding: 8px 2px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-acquire-field input:focus { outline: none; }
+
+.sd-acquire-note {
+  margin: 9px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.sd-acquire-actions {
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) {
+  .sd-detail-plate { padding: 22px 20px 18px; }
+  .sd-detail-photo { height: 160px; }
+  .sd-detail-counter { left: 20px; bottom: 8px; }
+  .sd-detail-nav { padding: 7px; }
+  .sd-detail-nav.prev { left: 6px; }
+  .sd-detail-nav.next { right: 6px; }
+  .sd-detail-body { padding: 18px 20px 22px; }
+  .sd-detail-actions { padding: 14px 20px; flex-wrap: wrap; }
+}
+
+/* ---------------------------------------------------------------------------
+   Phase 1.5 — search-first add.
+   A result is the add. The panel stays open so a run of colourways can be
+   filed in sequence, and price is offered afterwards on the added row.
+--------------------------------------------------------------------------- */
+.sd-add-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 100vw);
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--ink);
+  box-shadow: -24px 0 60px rgba(19, 19, 17, 0.14);
+}
+
+.sd-add-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px 16px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.sd-add-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 70%;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.sd-add-head button {
+  display: flex;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.sd-add-head button:hover { border-color: var(--hairline); color: var(--ink); }
+
+.sd-add-register { display: flex; gap: 0; padding: 16px 26px 0; }
+
+.sd-add-register-btn {
+  flex: 1;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid var(--hairline);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.sd-add-register-btn + .sd-add-register-btn { border-left: none; }
+.sd-add-register-btn.active { background: var(--ink); border-color: var(--ink); color: var(--ground); }
+
+.sd-add-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 26px 0;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--ink);
+  color: var(--text-faint);
+}
+
+.sd-add-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.sd-add-search input::placeholder { color: var(--text-faint); }
+
+.sd-add-search button {
+  display: flex;
+  padding: 3px;
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.sd-add-heading {
+  margin: 0 0 8px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-added { padding: 18px 26px 0; }
+
+.sd-added-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sd-added-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sd-added-name b { color: var(--ink); font-weight: 650; }
+
+.sd-added-price { display: flex; align-items: center; gap: 7px; }
+
+.sd-added-price span {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-added-price input {
+  width: 74px;
+  padding: 5px 2px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+.sd-added-undo {
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.sd-added-undo:hover { color: var(--accent); }
+
+.sd-add-results {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px 26px 0;
+
+  /* Same requirement as the register: the result cutouts blend with multiply,
+     so they need an isolated group painted with the paper colour. Without it
+     the blend reaches past the panel onto the scrim behind it and the shoes
+     render as blank space. */
+  isolation: isolate;
+  background: var(--bg);
+}
+
+.sd-add-note,
+.sd-add-error {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.sd-add-error { color: var(--accent); }
+
+.sd-add-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 26px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sd-add-result {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Same cutout treatment as a plate, so search results and the collection
+   read as the same material. */
+.sd-add-cut {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 88px;
+  mix-blend-mode: multiply;
+}
+
+.sd-add-cut img { width: 100%; height: 100%; object-fit: contain; }
+
+.sd-add-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--surface-raised);
+  color: var(--text-faint);
+}
+
+.sd-add-brand {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hairline);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sd-add-model {
+  margin-top: 3px;
+  font-size: 12.5px;
+  font-weight: 650;
+  line-height: 1.25;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sd-add-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sd-add-market {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-add-result:hover .sd-add-model { text-decoration: underline; text-underline-offset: 3px; }
+
+.sd-add-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 26px;
+  border-top: 1px solid var(--ink);
+}
+
+.sd-add-foot-note {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+@media (max-width: 560px) {
+  .sd-add-panel { width: 100vw; }
+  .sd-add-grid { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
+}
+
+/* ---------------------------------------------------------------------------
+   Drop-zone for hand-added pairs.
+   The pairs neither catalogue carries are the ones with no convenient image
+   link, so the form takes a file directly and normalizes it server-side.
+--------------------------------------------------------------------------- */
+.sd-drop-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 7px;
+}
+
+.sd-drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 62px;
+  padding: 14px;
+  border: 1px dashed var(--border-strong);
+  background: var(--bg);
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.sd-drop:hover,
+.sd-drop:focus-visible { border-color: var(--ink); color: var(--ink); }
+
+.sd-drop.is-over {
+  border-color: var(--accent);
+  border-style: solid;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.sd-drop.is-busy { cursor: progress; opacity: 0.65; }
+
+/* `.sd-form-grid label` lays its labels out as a column, and this is a label
+   nested inside one -- so the row direction and the checkbox's natural width
+   both have to out-specify that rule rather than merely restate it. */
+.sd-form-grid .sd-drop-flip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.sd-form-grid .sd-drop-flip input[type='checkbox'] {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  flex: 0 0 auto;
+  accent-color: var(--accent);
+}
+
+.sd-drop-error {
+  margin: 0;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+/* Owner bar: the one line that says this copy is read-only, and the way in. */
+.sd-owner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 48px 0 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.sd-owner-form { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.sd-owner-form input {
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 4px;
+  min-width: 220px;
+}
+.sd-owner-link {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.sd-owner-error { color: var(--accent); }

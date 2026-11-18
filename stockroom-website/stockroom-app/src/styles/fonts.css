@@ -1,0 +1,42 @@
+/* Self-hosted typography.
+ *
+ * Replaces the `@import url('https://fonts.googleapis.com/...')` that used to
+ * sit at the top of the <style> block inside App.jsx. That import was
+ * render-blocking, unversioned, and pulled two families from a third-party
+ * CDN on every load. Files now live in public/fonts (latin subset, woff2).
+ *
+ * All three faces are SIL Open Font License 1.1.
+ *
+ * Inter and Bebas Neue are the interim faces and are referenced by
+ * --font-body / --font-display. Archivo is declared but deliberately
+ * unreferenced: Phase 1 makes it the entire type system (variable width lets
+ * one file cover the condensed display cuts and the text sizes, and it ships
+ * tabular figures for prices). It is preloaded by nothing and costs nothing
+ * until something asks for it.
+ */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bebas-neue.woff2') format('woff2');
+}
+
+/* Phase 1 — not yet referenced by any token. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('/fonts/archivo-variable.woff2') format('woff2-variations');
+}

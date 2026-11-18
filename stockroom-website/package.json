@@ -1,0 +1,21 @@
+{
+  "name": "sneaker-search-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tiny backend that holds a KicksDB API key and exposes /api/search for The Stockroom",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "dev:all": "concurrently -n proxy,app -c blue,green \"npm:dev\" \"npm --prefix stockroom-app run dev\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
