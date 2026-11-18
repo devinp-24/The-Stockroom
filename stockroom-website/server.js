@@ -78,7 +78,7 @@ app.get('/api/auth', (req, res) => {
 app.use(express.json({ limit: '40mb' }));
 
 const KICKSDB_API_KEY = process.env.KICKSDB_API_KEY;
-const KICKSDB_BASE = 'https://api.kicks.dev/v3';
+const KICKSDB_BASE = process.env.KICKSDB_BASE || 'https://api.kicks.dev/v3';
 
 // KicksDB unifies StockX, GOAT, Flight Club, Stadium Goods, and KicksCrew
 // behind the same /v3/{platform}/products shape. Defaulting to StockX since
@@ -414,6 +414,10 @@ function cleanPairInput(body) {
   return out;
 }
 
+// The fields that describe the shoe itself, as opposed to my relationship
+// with it. KicksDB is the authority on these when it knows the style code.
+const IDENTITY_FIELDS = ['brand', 'model', 'colorway', 'sku', 'imageUrl'];
+
 const normSku = (sku) => String(sku || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 
 /** Best KicksDB match for a style code, or null. One request. */
@@ -440,15 +444,46 @@ app.get('/api/pairs/lookup', async (req, res) => {
   res.json({ found: Boolean(match), pair: match || null });
 });
 
+// What the extension asks when it opens on a product page: is this style
+// code already filed, and if not, what does KicksDB call it? The popup then
+// shows exactly what will be saved (canonical name, colourway and photo)
+// before the owner clicks anything. Owner only, because each call spends
+// KicksDB quota.
+app.get('/api/pairs/resolve', requireOwner, async (req, res) => {
+  const sku = normSku(req.query.sku);
+  if (!sku) return res.status(400).json({ error: 'Pass ?sku=' });
+  const items = await readCollection();
+  const existing = items.find((i) => normSku(i.sku) === sku) || null;
+  if (existing) return res.json({ existing, canonical: null });
+  let canonical = null;
+  try {
+    const hit = await lookupBySku(req.query.sku);
+    if (hit) {
+      canonical = pairFieldsFromSearchResult(hit);
+      // The same release can be filed under a different style code format;
+      // a KicksDB id match catches that too.
+      const byKicks = items.find((i) => i.kicksId && i.kicksId === canonical.kicksId);
+      if (byKicks) return res.json({ existing: byKicks, canonical: null });
+    }
+  } catch (err) {
+    console.error('resolve failed:', err.message);
+  }
+  res.json({ existing: null, canonical });
+});
+
 app.post('/api/pairs', requireOwner, async (req, res) => {
   const body = req.body ?? {};
   let fields = cleanPairInput(body);
   let kicksId = body.kicksId ? String(body.kicksId) : null;
   let marketPrice = typeof body.marketPrice === 'number' ? body.marketPrice : null;
 
-  // With a style code, KicksDB supplies the canonical name, colourway, photo
-  // and market price, so a pair saved from any shop reads the same as one
-  // added by search. What the caller sent still wins where it said something.
+  // With a style code, KicksDB supplies the canonical brand, name, colourway
+  // and photo, so a pair saved from any shop looks exactly like one added by
+  // search. Those identity fields come from KicksDB whenever it knows the
+  // shoe: a shop's own naming ("Blue Lagoon" vs "5am Flight") and its own
+  // photography (Nike's face the other way, on a lot of white space) would
+  // otherwise sit in the grid looking wrong. What only the caller knows
+  // (wishlist or owned, target price, size, notes, tags) is always theirs.
   if (body.lookup && fields.sku) {
     try {
       const hit = await lookupBySku(fields.sku);
@@ -456,9 +491,9 @@ app.post('/api/pairs', requireOwner, async (req, res) => {
         const canonical = pairFieldsFromSearchResult(hit);
         kicksId = canonical.kicksId;
         marketPrice = canonical.marketPrice;
-        fields = { ...canonical, ...Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== '')) };
-        delete fields.kicksId;
-        delete fields.marketPrice;
+        for (const key of IDENTITY_FIELDS) {
+          if (canonical[key]) fields[key] = canonical[key];
+        }
       }
     } catch (err) {
       console.error('sku lookup failed:', err.message);
