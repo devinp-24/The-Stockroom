@@ -4,7 +4,7 @@ My sneaker collection and wishlist in one place: 24 pairs I own and 800+ I
 want, so nothing I'm chasing gets forgotten and I can go through every option
 before I buy.
 
-**Live (read-only):** _link added after deploy_
+**Live (read-only):** [the-stockroom-production.up.railway.app](https://the-stockroom-production.up.railway.app)
 
 It has three parts, which share a single backend and a platform-agnostic
 `shared/` package:
